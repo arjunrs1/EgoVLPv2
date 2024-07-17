@@ -77,7 +77,7 @@ class FrozenInTime(BaseModel):
             arch_config = 'base_patch16_224'
             vit_init = 'imagenet-21k'
             if arch_config == 'base_patch16_224':
-                vit_model = torch.load("/cis/home/shraman/works_meta_2022/pre-training/EgoVLP_Fused_HardNegITM_Checkpoint_multinode/frozen-in-time-main/pretrained/jx_vit_base_p16_224-80ecf9dd.pth", map_location="cpu")
+                vit_model = torch.load("/private/home/arjunrs1/EgoVLPv2/pretrained_checkpoints/ego_vlpv2_pretrained.pth", map_location="cpu")
                 model = SpaceTimeTransformer(num_frames=self.num_frames,
                                             time_init=time_init,
                                             attention_style=attention_style)
@@ -193,6 +193,11 @@ class FrozenInTime(BaseModel):
 
         if task_names is not None:
             self.task_names = task_names
+
+        if 'Feature_Extraction_Text' in self.task_names:
+            text_embeddings = self.compute_text(text_data)
+            if return_embeds:
+                ret.update({'text_embeds':text_embeddings})
 
 
         if 'EgoNCE' in self.task_names: 
@@ -376,6 +381,8 @@ class FrozenInTime(BaseModel):
             video_embeddings = self.compute_video(data['video'])
             return video_embeddings
 
+        if 'Feature_Extraction_Text' in task_names:
+            ret = self.infer(data, task_names="Feature_Extraction_Text")
 
         if 'EgoNCE' in task_names:
 

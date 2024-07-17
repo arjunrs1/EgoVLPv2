@@ -14,6 +14,8 @@ from data_loader.EgoClip_EgoMCQ_dataset import EgoClip_EgoMCQ
 from data_loader.EpicKitchens_MIR_dataset import MultiInstanceRetrieval
 from data_loader.CharadesEgo_dataset import CharadesEgo
 from data_loader.Ego4D_MQ_dataset import MomentQueries
+from data_loader.EpicKitchens_text_NG_dataset import TextNarrationGrounding
+from data_loader.EpicKitchens_video_NG_dataset import VideoNarrationGrounding
 from data_loader.transforms import init_transform_dict, init_video_transform_dict
 
 def dataset_loader(dataset_name,
@@ -27,7 +29,8 @@ def dataset_loader(dataset_name,
                    subsample=1,
                    sliding_window_stride=-1,
                    reader='decord',
-                   neg_param=None):
+                   neg_param=None,
+                   video_id=None):
     kwargs = dict(
         dataset_name=dataset_name,
         text_params=text_params,
@@ -41,6 +44,7 @@ def dataset_loader(dataset_name,
         sliding_window_stride=sliding_window_stride,
         reader=reader,
         neg_param=neg_param,
+        video_id=video_id
     )
 
     # TODO: change to...
@@ -54,6 +58,10 @@ def dataset_loader(dataset_name,
         dataset = CharadesEgo(**kwargs)
     elif dataset_name == "Ego4D_MQ":
         dataset = MomentQueries(**kwargs)
+    elif dataset_name == "EpicKitchens_text_NG":
+        dataset = TextNarrationGrounding(**kwargs)
+    elif dataset_name == "EpicKitchens_video_NG":
+        dataset = VideoNarrationGrounding(**kwargs)
     else:
         raise NotImplementedError(f"Dataset: {dataset_name} not found.")
 
@@ -75,6 +83,7 @@ class TextVideoDataLoader(BaseDataLoaderExplicitSplit):
                  sliding_window_stride=-1,
                  reader='decord',
                  neg_param=None,
+                 video_id=None,
                  batch_size=1,
                  num_workers=1,
                  shuffle=True):
@@ -89,7 +98,7 @@ class TextVideoDataLoader(BaseDataLoaderExplicitSplit):
             tsfm_split = split
         tsfm = tsfm_dict[tsfm_split]
         dataset = dataset_loader(dataset_name, text_params, video_params, data_dir, meta_dir, split, tsfm, cut,
-                                 subsample, sliding_window_stride, reader, neg_param)
+                                 subsample, sliding_window_stride, reader, neg_param, video_id)
 
         super().__init__(dataset, batch_size, shuffle, num_workers)
         self.dataset_name = dataset_name
@@ -109,6 +118,7 @@ class DistTextVideoDataLoader(DistBaseDataLoaderExplicitSplit):
                  sliding_window_stride=-1,
                  reader='cv2',
                  neg_param=None,
+                 video_id=None,
                  batch_size=1,
                  num_workers=1,
                  shuffle=True):
@@ -126,7 +136,7 @@ class DistTextVideoDataLoader(DistBaseDataLoaderExplicitSplit):
         tsfm = tsfm_dict[tsfm_split]
 
         dataset = dataset_loader(dataset_name, text_params, video_params, data_dir, meta_dir, split, tsfm, cut,
-                                 subsample, sliding_window_stride, reader, neg_param)
+                                 subsample, sliding_window_stride, reader, neg_param, video_id)
         super().__init__(dataset, batch_size, shuffle, num_workers)
         self.dataset_name = dataset_name
 
@@ -146,6 +156,7 @@ class MultiDistTextVideoDataLoader(MultiDistBaseDataLoaderExplicitSplit):
                  sliding_window_stride=-1,
                  reader='cv2',
                  neg_param=None,
+                 video_id=None,
                  batch_size=1,
                  num_workers=1,
                  shuffle=True):
@@ -162,7 +173,7 @@ class MultiDistTextVideoDataLoader(MultiDistBaseDataLoaderExplicitSplit):
         tsfm = tsfm_dict[tsfm_split]
 
         dataset = dataset_loader(dataset_name, text_params, video_params, data_dir, meta_dir, split, tsfm, cut,
-                                 subsample, sliding_window_stride, reader, neg_param)
+                                 subsample, sliding_window_stride, reader, neg_param, video_id)
         super().__init__(args, dataset, batch_size, shuffle, num_workers)
         self.dataset_name = dataset_name
 

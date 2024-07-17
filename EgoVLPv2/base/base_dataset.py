@@ -36,6 +36,7 @@ class TextVideoDataset(Dataset):
                  sliding_window_stride=-1,
                  reader='decord',
                  neg_param=None,
+                 video_id=None,
                  ):
         self.dataset_name = dataset_name
         self.text_params = text_params
@@ -54,6 +55,7 @@ class TextVideoDataset(Dataset):
         self.video_reader = video_reader[reader]
         self.label_type = 'caption'
         self.neg_param = neg_param
+        self.video_id = video_id
         self._load_metadata()
         if self.sliding_window_stride != -1:
             if self.split != 'test':

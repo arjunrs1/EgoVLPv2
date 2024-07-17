@@ -45,6 +45,10 @@ class ConfigParser:
                 resume_cfg_fname = Path('configs/eval/nlq.json')
             if eval_mode == "mq":
                 resume_cfg_fname = Path('configs/eval/mq.json')
+            if eval_mode == "epic_vfg":
+                resume_cfg_fname = Path('configs/eval/epic_video_feature_generation.json')
+            if eval_mode == "epic_nfg":
+                resume_cfg_fname = Path('configs/eval/epic_narration_feature_generation.json')
 
             config = read_json(resume_cfg_fname)
             if args.config is not None:
