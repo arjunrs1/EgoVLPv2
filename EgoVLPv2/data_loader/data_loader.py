@@ -16,6 +16,8 @@ from data_loader.CharadesEgo_dataset import CharadesEgo
 from data_loader.Ego4D_MQ_dataset import MomentQueries
 from data_loader.EpicKitchens_text_NG_dataset import TextNarrationGrounding
 from data_loader.EpicKitchens_video_NG_dataset import VideoNarrationGrounding
+from data_loader.EgoExo4D_text_NG_dataset import EgoExo4DTextNarrationGrounding
+from data_loader.EgoExo4D_video_NG_dataset import  EgoExo4DVideoNarrationGrounding
 from data_loader.transforms import init_transform_dict, init_video_transform_dict
 
 def dataset_loader(dataset_name,
@@ -62,6 +64,10 @@ def dataset_loader(dataset_name,
         dataset = TextNarrationGrounding(**kwargs)
     elif dataset_name == "EpicKitchens_video_NG":
         dataset = VideoNarrationGrounding(**kwargs)
+    elif dataset_name == "EgoExo4D_video_NG":
+        dataset = EgoExo4DVideoNarrationGrounding(**kwargs)
+    elif dataset_name == "EgoExo4D_text_NG":
+        dataset = EgoExo4DTextNarrationGrounding(**kwargs)
     else:
         raise NotImplementedError(f"Dataset: {dataset_name} not found.")
 

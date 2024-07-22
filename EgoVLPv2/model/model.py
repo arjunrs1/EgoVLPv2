@@ -77,7 +77,7 @@ class FrozenInTime(BaseModel):
             arch_config = 'base_patch16_224'
             vit_init = 'imagenet-21k'
             if arch_config == 'base_patch16_224':
-                vit_model = torch.load("/private/home/arjunrs1/EgoVLPv2/pretrained_checkpoints/ego_vlpv2_pretrained.pth", map_location="cpu")
+                vit_model = torch.load("/private/home/arjunrs1/exo_narration_grounding/feature_extraction/EgoVLPv2/pretrained_checkpoints/ego_vlpv2_pretrained.pth", map_location="cpu")
                 model = SpaceTimeTransformer(num_frames=self.num_frames,
                                             time_init=time_init,
                                             attention_style=attention_style)

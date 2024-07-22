@@ -63,3 +63,8 @@ dist/
 # Custom
 *.custom.py
 
+# feature directories
+EgoVLPv2/video_features/
+EgoVLPv2/video_features_old_DEPRECATED/
+EgoVLPv2/narration_features/
+
