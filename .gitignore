@@ -36,10 +36,11 @@ _ext
 *.so
 dist/
 
-# pytorch/python/numpy formats
+# pytorch/python/numpy/json formats
 *.pth
 *.pkl
 *.npy
+*.json
 
 # ipython/jupyter notebooks
 *.ipynb

@@ -84,8 +84,8 @@ class EgoExo4DTextNarrationGrounding(TextVideoDataset):
         video_fp, _ = self._get_video_path(sample)
         caption = self._get_caption(item, sample)
 
-        start_frame = int(sample[5])
-        end_frame = int(sample[6])
+        start_frame = 0 #dummy values, not used for text generation
+        end_frame = 31 #dummy values, not used for text generation
 
         frame_sample = 'rand'
         if self.split in ['test', 'val']:
@@ -124,7 +124,7 @@ class EgoExo4DTextNarrationGrounding(TextVideoDataset):
                 imgs = self.transforms(imgs)
             print("finished transforms...")
 
-        meta_arr = {'video_uid': sample[2], 'clip_uid': sample[2], 'narration_uid': sample[4], 'dataset': self.dataset_name}
+        meta_arr = {'video_uid': sample[2], 'clip_uid': sample[2], 'narration_uid': sample[5], 'dataset': self.dataset_name}
         data = {'video': "None", 'text': caption, 'meta': meta_arr}
         return data
 
