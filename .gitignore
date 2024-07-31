@@ -40,7 +40,7 @@ dist/
 *.pth
 *.pkl
 *.npy
-configs/eval/*.json
+EgoVLPv2/configs/eval/*.json
 
 # ipython/jupyter notebooks
 *.ipynb
