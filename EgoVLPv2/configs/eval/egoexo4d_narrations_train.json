@@ -18,7 +18,7 @@
             },
             "projection": "minimal",
             "projection_dim": 4096,
-            "load_checkpoint" : "/private/home/arjunrs1/exo_narration_grounding/feature_extraction/EgoVLPv2/pretrained_checkpoints/ego_vlpv2_pretrained.pth"
+            "load_checkpoint" : "/private/home/fncheng/stor/codes/misc/EgoVLPv2_EgoExo/EgoVLPv2/pretrained_ckpts/EgoVLPv2_Pretraining_bs512-lr3e_5-Ep20/model_best.pth"
         }
     },
     "data_loader":
