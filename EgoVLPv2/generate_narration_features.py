@@ -28,7 +28,7 @@ def run():
     config._config['data_loader']['args']['split'] = args.split
     config._config['data_loader']['args']['tsfm_split'] = 'test'  # set transform to test split to remove augmentations
     config._config['data_loader']['args']['shuffle'] = False
-    config._config['data_loader']['args']['batch_size'] = args.batch_size
+    config._config['data_loader']['args']['batch_size'] = 1
     config._config['data_loader']['args']['sliding_window_stride'] = args.sliding_window_stride
 
     data_loader = config.initialize('data_loader', module_data)
@@ -53,10 +53,14 @@ def run():
     dim = config.config['arch']['args']['projection_dim']
     with torch.no_grad():
         for i, data in enumerate(tqdm.tqdm(data_loader)):
-            if os.path.exists(os.path.join(args.save_dir, data['meta']['narration_uid'][0]+'.pt')):
+            if os.path.exists(os.path.join(args.save_dir, data['meta']['video_uid'][0], data['meta']['narration_uid'][0]+'.pt')):
                 print(f"{data['meta']['narration_uid']} is already.")
                 continue
-            data['text'] = tokenizer(data['text'], return_tensors='pt', padding='max_length', max_length=30, truncation=True)
+            try:
+                data['text'] = tokenizer(data['text'], return_tensors='pt', padding='max_length', max_length=30, truncation=True)
+            except:
+                print(data['text'])
+                continue
             data['text'] = {key: val.cuda() for key, val in data['text'].items()}
             ret = model.module.infer(data, return_embeds=True, task_names="Feature_Extraction_Text", ret={}) #TODO: Look at task names; dual implies reliance on vid features which we dont want
             text_embed = ret['text_embeds']

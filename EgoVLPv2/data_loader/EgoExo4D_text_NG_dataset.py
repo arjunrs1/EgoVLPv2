@@ -38,14 +38,15 @@ class EgoExo4DTextNarrationGrounding(TextVideoDataset):
         self.metadata = metadata
 
     def _get_video_path(self, sample):
-        take_name, ego_cam_path = sample[2:4]
+        take_name = sample['take_uid']
+        ego_cam_path = sample['ego_camera_path']
         rel_video_fp = '{}/{}'.format(take_name, ego_cam_path)
         full_video_fp = os.path.join(self.data_dir, rel_video_fp)
 
         return full_video_fp, rel_video_fp
 
     def _get_caption(self, idx, sample):
-        return sample[1]
+        return sample['narration']
 
     def get_frame_ids(self, start_frame, end_frame, num_segments=32, jitter=True):
         seg_size = float(end_frame - start_frame - 1) / num_segments
@@ -124,7 +125,7 @@ class EgoExo4DTextNarrationGrounding(TextVideoDataset):
                 imgs = self.transforms(imgs)
             print("finished transforms...")
 
-        meta_arr = {'video_uid': sample[2], 'clip_uid': sample[2], 'narration_uid': sample[5], 'dataset': self.dataset_name}
+        meta_arr = {'video_uid': sample['take_uid'], 'clip_uid': sample['take_uid'], 'narration_uid': sample['unique_narration_id'], 'dataset': self.dataset_name}
         data = {'video': "None", 'text': caption, 'meta': meta_arr}
         return data
 
