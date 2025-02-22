@@ -77,7 +77,7 @@ class FrozenInTime(BaseModel):
             arch_config = 'base_patch16_224'
             vit_init = 'imagenet-21k'
             if arch_config == 'base_patch16_224':
-                vit_model = torch.load("/private/home/arjunrs1/exo_narration_grounding/feature_extraction/EgoVLPv2/pretrained_checkpoints/ego_vlpv2_pretrained.pth", map_location="cpu")
+                vit_model = torch.load("/scratch/projects/CCR24058/EgoExo4D/ckpts/EgoVLPv2_b512_lr3e-5.pth", map_location="cpu", weights_only=False)
                 model = SpaceTimeTransformer(num_frames=self.num_frames,
                                             time_init=time_init,
                                             attention_style=attention_style)
@@ -177,7 +177,7 @@ class FrozenInTime(BaseModel):
             self.itm_score.apply(init_weights)
 
         if load_checkpoint not in ["", None]:
-            checkpoint = torch.load(load_checkpoint, map_location='cpu')
+            checkpoint = torch.load(load_checkpoint, map_location='cpu', weights_only=False)
             state_dict = checkpoint['state_dict']
             new_state_dict = state_dict_data_parallel_fix(state_dict, self.state_dict())
             new_state_dict = self._inflate_positional_embeds(new_state_dict)

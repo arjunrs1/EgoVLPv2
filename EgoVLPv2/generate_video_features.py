@@ -58,11 +58,19 @@ def run():
                 continue
             # this implementation is cautious, we use 4f video-encoder to extract featurs of whole clip.
             f, c, h, w = data['video'].shape[1], data['video'].shape[2], data['video'].shape[3], data['video'].shape[4]
+            #print(f"f: {f}")
+            #print(f"c: {c}")
+            #print(f"h: {h}")
+            #print(f"w: {w}")
+            #print(f"data['video'].shape = {data['video'].shape}")
             data['video'] = data['video'][0][:(f // num_frame * num_frame), ]
+            #print(f"2: data['video'].shape = {data['video'].shape}")
             data['video'] = data['video'].reshape(-1, num_frame, c, h, w)
+            #print(f"3: data['video'].shape = {data['video'].shape}")
 
             data['video'] = data['video'].to(device)
             outs = torch.zeros(data['video'].shape[0], dim)
+            #print(f"outs.shape = {outs.shape}")
             
             b_s = 64 ## Batch size inside the next loop, as (897, 16, 3, 224, 224) goes out of memory
 
@@ -82,9 +90,14 @@ def run():
                 video_embeds = model(data=data_batch, n_embeds=None, v_embeds=None, allgather=None, n_gpu=None, args=None, config=None, loss_egonce=None, gpu=None, task_names='Feature_Extraction')
                 outs[start:end,] = video_embeds
 
-            if not os.path.exists(os.path.join(args.save_dir, data['meta']['video_uid'][0])):
-                os.makedirs(os.path.join(args.save_dir, data['meta']['video_uid'][0]))
-            torch.save(outs, os.path.join(args.save_dir, data['meta']['video_uid'][0], data['meta']['clip_uid'][0]+'.pt'))
+            if data['meta']['dataset'][0] == "LEMMA_video_NG":
+                feature_rel_path = os.path.join(data['meta']['video_uid'][0], data['meta']['view_name'][0]) 
+            else:
+                feature_rel_path = data['meta']['video_uid'][0]
+
+            if not os.path.exists(os.path.join(args.save_dir, feature_rel_path)):
+                os.makedirs(os.path.join(args.save_dir, feature_rel_path))
+            torch.save(outs, os.path.join(args.save_dir, feature_rel_path, data['meta']['clip_uid'][0]+'.pt'))
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser(description='PyTorch Template')

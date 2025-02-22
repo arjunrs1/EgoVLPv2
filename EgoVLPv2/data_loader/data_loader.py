@@ -11,13 +11,7 @@ import sys
 from base import BaseDataLoaderExplicitSplit, BaseMultiDataLoader, \
     DistBaseDataLoaderExplicitSplit, MultiDistBaseDataLoaderExplicitSplit
 from data_loader.EgoClip_EgoMCQ_dataset import EgoClip_EgoMCQ
-from data_loader.EpicKitchens_MIR_dataset import MultiInstanceRetrieval
-from data_loader.CharadesEgo_dataset import CharadesEgo
-from data_loader.Ego4D_MQ_dataset import MomentQueries
-from data_loader.EpicKitchens_text_NG_dataset import TextNarrationGrounding
-from data_loader.EpicKitchens_video_NG_dataset import VideoNarrationGrounding
-from data_loader.EgoExo4D_text_NG_dataset import EgoExo4DTextNarrationGrounding
-from data_loader.EgoExo4D_video_NG_dataset import  EgoExo4DVideoNarrationGrounding
+from data_loader.LEMMA_video_NG_dataset import LemmaFrameNarrationGrounding
 from data_loader.transforms import init_transform_dict, init_video_transform_dict
 
 def dataset_loader(dataset_name,
@@ -52,22 +46,8 @@ def dataset_loader(dataset_name,
     # TODO: change to...
     #  dataset = globals()[dataset_name]
     #  ...is this safe / or just lazy?
-    if dataset_name == "EgoClip":
-        dataset = EgoClip_EgoMCQ(**kwargs)
-    elif dataset_name == "EpicKitchens_MIR":
-        dataset = MultiInstanceRetrieval(**kwargs)
-    elif dataset_name == "CharadesEgo":
-        dataset = CharadesEgo(**kwargs)
-    elif dataset_name == "Ego4D_MQ":
-        dataset = MomentQueries(**kwargs)
-    elif dataset_name == "EpicKitchens_text_NG":
-        dataset = TextNarrationGrounding(**kwargs)
-    elif dataset_name == "EpicKitchens_video_NG":
-        dataset = VideoNarrationGrounding(**kwargs)
-    elif dataset_name == "EgoExo4D_video_NG":
-        dataset = EgoExo4DVideoNarrationGrounding(**kwargs)
-    elif dataset_name == "EgoExo4D_text_NG":
-        dataset = EgoExo4DTextNarrationGrounding(**kwargs)
+    if dataset_name == "LEMMA_video_NG":
+        dataset = LemmaFrameNarrationGrounding(**kwargs)
     else:
         raise NotImplementedError(f"Dataset: {dataset_name} not found.")
 
