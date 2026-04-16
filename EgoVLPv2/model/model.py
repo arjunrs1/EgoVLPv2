@@ -77,7 +77,7 @@ class FrozenInTime(BaseModel):
             arch_config = 'base_patch16_224'
             vit_init = 'imagenet-21k'
             if arch_config == 'base_patch16_224':
-                vit_model = torch.load("/scratch/projects/CCR24058/EgoExo4D/ckpts/EgoVLPv2_b512_lr3e-5.pth", map_location="cpu", weights_only=False)
+                vit_model = torch.load("/vision/vision_data_2/EgoExo4D_public_v1/ckpts/EgoVLPv2_b512_lr3e-5.pth", map_location="cpu", weights_only=False)
                 model = SpaceTimeTransformer(num_frames=self.num_frames,
                                             time_init=time_init,
                                             attention_style=attention_style)

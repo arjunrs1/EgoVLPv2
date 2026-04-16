@@ -12,6 +12,7 @@ from base import BaseDataLoaderExplicitSplit, BaseMultiDataLoader, \
     DistBaseDataLoaderExplicitSplit, MultiDistBaseDataLoaderExplicitSplit
 from data_loader.EgoClip_EgoMCQ_dataset import EgoClip_EgoMCQ
 from data_loader.LEMMA_video_NG_dataset import LemmaFrameNarrationGrounding
+from data_loader.LEMMA_text_NG_dataset import LemmaTextNarrationGrounding
 from data_loader.transforms import init_transform_dict, init_video_transform_dict
 
 def dataset_loader(dataset_name,
@@ -48,6 +49,8 @@ def dataset_loader(dataset_name,
     #  ...is this safe / or just lazy?
     if dataset_name == "LEMMA_video_NG":
         dataset = LemmaFrameNarrationGrounding(**kwargs)
+    elif dataset_name == "LEMMA_text_NG":
+        dataset = LemmaTextNarrationGrounding(**kwargs)
     else:
         raise NotImplementedError(f"Dataset: {dataset_name} not found.")
 

@@ -53,20 +53,22 @@ def run():
     dim = config.config['arch']['args']['projection_dim']
     with torch.no_grad():
         for i, data in enumerate(tqdm.tqdm(data_loader)):
-            if os.path.exists(os.path.join(args.save_dir, data['meta']['video_uid'][0], data['meta']['narration_uid'][0]+'.pt')):
-                print(f"{data['meta']['narration_uid']} is already.")
+            if os.path.exists(os.path.join(args.save_dir, f"{data['meta']['hoi_index'][0]}.pt")):
+                print(f"{data['meta']['hoi_index']} already exists.")
                 continue
             try:
                 data['text'] = tokenizer(data['text'], return_tensors='pt', padding='max_length', max_length=30, truncation=True)
             except:
                 print(data['text'])
+                print(data['meta'])
                 continue
             data['text'] = {key: val.cuda() for key, val in data['text'].items()}
             ret = model.module.infer(data, return_embeds=True, task_names="Feature_Extraction_Text", ret={}) #TODO: Look at task names; dual implies reliance on vid features which we dont want
             text_embed = ret['text_embeds']
-            if not os.path.exists(os.path.join(args.save_dir, data['meta']['video_uid'][0])):
-                os.makedirs(os.path.join(args.save_dir, data['meta']['video_uid'][0]))
-            torch.save(text_embed, os.path.join(args.save_dir, data['meta']['video_uid'][0], data['meta']['narration_uid'][0]+'.pt'))
+
+            #if not os.path.exists(os.path.join(args.save_dir, f"{data['meta']['hoi_index'][0]}.pt")):
+            #    os.makedirs(os.path.join(args.save_dir, data['meta']['hoi_index'][0]))
+            torch.save(text_embed, os.path.join(args.save_dir, f"{data['meta']['hoi_index'][0]}.pt"))
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser(description='PyTorch Template')
@@ -79,7 +81,7 @@ if __name__ == '__main__':
                       help='config file path (default: None)')
     args.add_argument('-s', '--sliding_window_stride', default=-1, type=int,
                       help='test time temporal augmentation, repeat samples with different start times.')
-    args.add_argument('--split', default='test', choices=['train', 'val', 'test'],
+    args.add_argument('--split', default='test', choices=['all', 'train', 'val', 'test'],
                       help='split to evaluate on.')
     args.add_argument('--batch_size', default=1, type=int,
                       help='size of batch')
